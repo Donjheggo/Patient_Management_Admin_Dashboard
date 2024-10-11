@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 
-export async function GetDoctors(
+export async function GetSchedules(
   searchQuery: string,
   page: number,
   items_per_page: number
@@ -11,13 +11,13 @@ export async function GetDoctors(
   try {
     const supabase = createClient();
     const query = supabase
-      .from("doctors")
-      .select("*")
+      .from("doctor_schedules")
+      .select(`*, doctor_id(name)`)
       .order("created_at", { ascending: false })
       .range((page - 1) * items_per_page, page * items_per_page - 1);
 
     const { data, error } = searchQuery
-      ? await query.ilike("name", `%${searchQuery}%`)
+      ? await query.ilike("doctor_id.name", `%${searchQuery}%`)
       : await query;
 
     if (error) {
@@ -32,32 +32,34 @@ export async function GetDoctors(
   }
 }
 
-export async function CreateDoctor(formData: FormData) {
+export async function CreateSchedule(formData: FormData) {
   try {
     const supabase = createClient();
     const { error } = await supabase
-      .from("doctors")
+      .from("doctor_schedules")
       .insert({
-        name: formData.get("name"),
-        specialization: formData.get("specialization"),
+        doctor_id: formData.get("doctor_id"),
+        start_time: formData.get("start_time"),
+        end_time: formData.get("end_time"),
+        available: formData.get("available"),
       })
       .select();
 
     if (error) {
       return { error: error };
     }
-    revalidatePath("/doctors");
+    revalidatePath("/schedules");
     return { error: "" };
   } catch (error) {
     return { error: error };
   }
 }
 
-export async function GetDoctorById(id: string) {
+export async function GetScheduleById(id: string) {
   try {
     const supabase = createClient();
     const { error, data } = await supabase
-      .from("doctors")
+      .from("doctor_schedules")
       .select("*")
       .eq("id", id)
       .single();
@@ -71,14 +73,16 @@ export async function GetDoctorById(id: string) {
   }
 }
 
-export async function UpdateDoctor(formData: FormData) {
+export async function UpdateSchedule(formData: FormData) {
   try {
     const supabase = createClient();
     const { error } = await supabase
-      .from("doctors")
+      .from("doctor_schedules")
       .update({
-        name: formData.get("name"),
-        specialization: formData.get("specialization"),
+        doctor_id: formData.get("doctor_id"),
+        start_time: formData.get("start_time"),
+        end_time: formData.get("end_time"),
+        available: formData.get("available"),
       })
       .eq("id", formData.get("id"))
       .select();
@@ -86,33 +90,36 @@ export async function UpdateDoctor(formData: FormData) {
     if (error) {
       return { error: error };
     }
-    revalidatePath("/doctors");
+    revalidatePath("/schedules");
     return { error: "" };
   } catch (error) {
     return { error: error };
   }
 }
 
-export async function DeleteDoctor(id: string) {
+export async function DeleteSchedule(id: string) {
   try {
     const supabase = createClient();
-    const { error } = await supabase.from("doctors").delete().eq("id", id);
+    const { error } = await supabase
+      .from("doctor_schedules")
+      .delete()
+      .eq("id", id);
 
     if (error) {
       return { error: error };
     }
-    revalidatePath("/doctors");
+    revalidatePath("/schedules");
     return { error: "" };
   } catch (error) {
     return { error: error };
   }
 }
 
-export async function GetTotalDoctors() {
+export async function GetTotalSchedules() {
   try {
     const supabase = createClient();
     const { data, error } = await supabase
-      .from("doctors")
+      .from("doctor_schedules")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -125,25 +132,5 @@ export async function GetTotalDoctors() {
   } catch (error) {
     console.error(error);
     return 0;
-  }
-}
-
-export async function GetAllDoctors() {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from("doctors")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return [];
-    }
-
-    return data || [];
-  } catch (error) {
-    console.error(error);
-    return [];
   }
 }
