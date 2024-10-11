@@ -2,10 +2,11 @@ import {
   LogOut,
   LayoutDashboard,
   UsersRound,
-  HandCoins,
-  Armchair,
-  ShoppingCart,
   MessageSquareMore,
+  BriefcaseMedical,
+  ClipboardPlus,
+  CalendarClock,
+  CalendarCheck,
 } from "lucide-react";
 import { ThemeToggler } from "../themes/theme-toggler";
 import { signout } from "@/lib/actions/auth";
@@ -75,27 +76,27 @@ export const adminLinks = [
   {
     name: "Doctors",
     href: "/doctors",
-    icon: <Armchair />,
+    icon: <BriefcaseMedical />,
   },
   {
     name: "Patients",
     href: "/patients",
-    icon: <ShoppingCart />,
+    icon: <ClipboardPlus />,
   },
   {
     name: "Schedules",
     href: "/schedules",
-    icon: <MessageSquareMore />,
+    icon: <CalendarClock />,
   },
   {
     name: "Appointments",
     href: "/appointments",
-    icon: <HandCoins />,
+    icon: <CalendarCheck />,
   },
   {
     name: "Messages",
     href: "/messages",
-    icon: <HandCoins />,
+    icon: <MessageSquareMore />,
   },
   {
     name: "Users",

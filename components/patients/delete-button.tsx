@@ -1,8 +1,8 @@
-import { DeleteProduct } from "@/lib/actions/products";
+import { DeletePatient } from "@/lib/actions/patients";
 import { TrashIcon } from "lucide-react";
 
 export default function DeleteButton({ id }: { id: string }) {
-  const deleteItem = DeleteProduct.bind(null, id);
+  const deleteItem = DeletePatient.bind(null, id);
 
   return (
     <form action={deleteItem} className="cursor-pointer w-full">

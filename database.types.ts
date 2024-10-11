@@ -9,60 +9,111 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      carts: {
+      appointments: {
         Row: {
           created_at: string
+          doctor_id: string
           id: string
-          product_id: string
-          quantity: number
-          user_id: string
+          patient_id: string
+          reason: string
+          schedule_id: string
+          status: Database["public"]["Enums"]["APPOINTMENT_STATUS"]
         }
         Insert: {
           created_at?: string
+          doctor_id?: string
           id?: string
-          product_id?: string
-          quantity: number
-          user_id?: string
+          patient_id?: string
+          reason: string
+          schedule_id?: string
+          status?: Database["public"]["Enums"]["APPOINTMENT_STATUS"]
         }
         Update: {
           created_at?: string
+          doctor_id?: string
           id?: string
-          product_id?: string
-          quantity?: number
-          user_id?: string
+          patient_id?: string
+          reason?: string
+          schedule_id?: string
+          status?: Database["public"]["Enums"]["APPOINTMENT_STATUS"]
         }
         Relationships: [
           {
-            foreignKeyName: "carts_owner_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "doctors"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "carts_product_id_fkey"
-            columns: ["product_id"]
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
             isOneToOne: false
-            referencedRelation: "products"
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_schedules"
             referencedColumns: ["id"]
           },
         ]
       }
-      gcash_number_payment: {
+      doctor_schedules: {
+        Row: {
+          available: boolean
+          created_at: string
+          doctor_id: string
+          end_time: string
+          id: string
+          start_time: string
+        }
+        Insert: {
+          available?: boolean
+          created_at?: string
+          doctor_id?: string
+          end_time: string
+          id?: string
+          start_time: string
+        }
+        Update: {
+          available?: boolean
+          created_at?: string
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_schedules_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctors: {
         Row: {
           created_at: string
           id: string
-          number: string
+          name: string
+          specialization: string
         }
         Insert: {
           created_at?: string
           id?: string
-          number: string
+          name: string
+          specialization: string
         }
         Update: {
           created_at?: string
           id?: string
-          number?: string
+          name?: string
+          specialization?: string
         }
         Relationships: []
       }
@@ -111,139 +162,46 @@ export type Database = {
           },
         ]
       }
-      order_items: {
-        Row: {
-          created_at: string
-          id: string
-          order_id: string
-          price: number
-          product_id: string
-          quantity: number
-          shipping_fee: number
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          order_id?: string
-          price: number
-          product_id?: string
-          quantity: number
-          shipping_fee: number
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          order_id?: string
-          price?: number
-          product_id?: string
-          quantity?: number
-          shipping_fee?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_items_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      orders: {
+      patients: {
         Row: {
           address: string
+          birthdate: string
           contact_number: number
           created_at: string
-          delivery_schedule: string | null
-          delivery_status: Database["public"]["Enums"]["DELIVERY_STATUS"]
-          gcash_reference_number: string | null
+          gender: Database["public"]["Enums"]["GENDER"]
           id: string
           name: string
-          payment_method: Database["public"]["Enums"]["PAYMENT_METHOD"]
-          total_payable: number
-          total_price: number
-          total_shipping_fee: number
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           address: string
+          birthdate: string
           contact_number: number
           created_at?: string
-          delivery_schedule?: string | null
-          delivery_status?: Database["public"]["Enums"]["DELIVERY_STATUS"]
-          gcash_reference_number?: string | null
+          gender: Database["public"]["Enums"]["GENDER"]
           id?: string
           name: string
-          payment_method: Database["public"]["Enums"]["PAYMENT_METHOD"]
-          total_payable: number
-          total_price: number
-          total_shipping_fee: number
-          user_id?: string
+          user_id?: string | null
         }
         Update: {
           address?: string
+          birthdate?: string
           contact_number?: number
           created_at?: string
-          delivery_schedule?: string | null
-          delivery_status?: Database["public"]["Enums"]["DELIVERY_STATUS"]
-          gcash_reference_number?: string | null
+          gender?: Database["public"]["Enums"]["GENDER"]
           id?: string
           name?: string
-          payment_method?: Database["public"]["Enums"]["PAYMENT_METHOD"]
-          total_payable?: number
-          total_price?: number
-          total_shipping_fee?: number
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "orders_owner_id_fkey"
+            foreignKeyName: "patients_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
-      }
-      products: {
-        Row: {
-          created_at: string
-          description: string
-          id: string
-          image: string
-          name: string
-          price: number
-          quantity: number
-          shipping_fee: number
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          id?: string
-          image: string
-          name: string
-          price: number
-          quantity: number
-          shipping_fee: number
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          id?: string
-          image?: string
-          name?: string
-          price?: number
-          quantity?: number
-          shipping_fee?: number
-        }
-        Relationships: []
       }
       users: {
         Row: {
@@ -285,8 +243,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      DELIVERY_STATUS: "PENDING" | "OUT FOR DELIVERY" | "COMPLETED"
-      PAYMENT_METHOD: "COD" | "GCASH"
+      APPOINTMENT_STATUS: "PENDING" | "ACCEPTED" | "COMPLETED"
+      GENDER: "MALE" | "FEMALE"
       USER_ROLE: "USER" | "ADMIN"
     }
     CompositeTypes: {

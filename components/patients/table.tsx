@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -21,15 +20,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GetProducts, GetTotalProducts } from "@/lib/actions/products";
+import { GetPatients, GetTotalPatients } from "@/lib/actions/patients";
 import { TablePagination } from "./pagination";
-import UpdateButton from "./update-button";
-import DeleteButton from "./delete-button";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
-import Image from "next/image";
+import DeleteButton from "./delete-button";
 
-export default async function ProductsTable({
+export default async function PatientsTable({
   searchQuery,
   page,
 }: {
@@ -38,63 +35,53 @@ export default async function ProductsTable({
 }) {
   const items_per_page = 7;
 
-  const [totalProducts, products] = await Promise.all([
-    GetTotalProducts(),
-    GetProducts(searchQuery, page, items_per_page),
+  const [totalPatients, patients] = await Promise.all([
+    GetTotalPatients(),
+    GetPatients(searchQuery, page, items_per_page),
   ]);
 
-  const totalPages = Math.ceil(totalProducts / items_per_page);
+  const totalPages = Math.ceil(totalPatients / items_per_page);
   return (
     <Card className="w-full shadow-none bg-background">
       <CardHeader>
-        <CardTitle>Products</CardTitle>
-        <CardDescription>Manage products.</CardDescription>
+        <CardTitle>Patients</CardTitle>
+        <CardDescription>Manage patients.</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden w-[100px] sm:table-cell">
-                <span className="sr-only">Image</span>
-              </TableHead>
+              <TableHead className="table-cell">Email</TableHead>
               <TableHead className="table-cell">Name</TableHead>
-              <TableHead className="table-cell">Description</TableHead>
-              <TableHead className="table-cell">Quantity</TableHead>
-              <TableHead className="table-cell">Price</TableHead>
-              <TableHead className="table-cell">Shipping fee</TableHead>
-
+              <TableHead className="table-cell">Gender</TableHead>
+              <TableHead className="table-cell">Address</TableHead>
+              <TableHead className="table-cell">Birthdate</TableHead>
+              <TableHead className="table-cell">Contact no.</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products?.map((item, index) => (
+            {patients?.map((item, index) => (
               <TableRow key={index}>
-                <TableCell className="hidden sm:table-cell">
-                  <Image
-                    alt="Product image"
-                    className="aspect-square rounded-md object-cover"
-                    height="64"
-                    src={item.image}
-                    width="64"
-                  />
+                <TableCell>
+                  <p className="font-normal">{item.user_id.email}</p>
                 </TableCell>
                 <TableCell>
                   <p className="font-normal">{item.name}</p>
                 </TableCell>
                 <TableCell>
-                  <p className="font-normal">{item.description}</p>
-                </TableCell>
-
-                <TableCell>
-                  <p className="font-normal">{item.quantity}</p>
+                  <p className="font-normal">{item.gender}</p>
                 </TableCell>
                 <TableCell>
-                  <p className="font-normal">₱{item.price}</p>
+                  <p className="font-normal">{item.address}</p>
                 </TableCell>
                 <TableCell>
-                  <p className="font-normal">₱{item.shipping_fee}</p>
+                  <p className="font-normal">{item.birthdate}</p>
+                </TableCell>
+                <TableCell>
+                  <p className="font-normal">{item.contact_number}</p>
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -105,10 +92,6 @@ export default async function ProductsTable({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <UpdateButton id={item.id} />
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
                       <DropdownMenuItem>
                         <DeleteButton id={item.id} />
                       </DropdownMenuItem>
@@ -123,8 +106,8 @@ export default async function ProductsTable({
       <CardFooter>
         <div className="text-xs text-muted-foreground">
           <strong>{(page - 1) * items_per_page + 1}</strong>-
-          <strong>{Math.min(page * items_per_page, totalProducts)}</strong> of{" "}
-          <strong>{totalProducts}</strong>
+          <strong>{Math.min(page * items_per_page, totalPatients)}</strong> of{" "}
+          <strong>{totalPatients}</strong>
         </div>
         <div className="ml-auto">
           <TablePagination totalPages={totalPages} />
