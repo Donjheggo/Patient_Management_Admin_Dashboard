@@ -73,23 +73,28 @@ export const adminLinks = [
     icon: <LayoutDashboard />,
   },
   {
-    name: "Products",
-    href: "/products",
+    name: "Doctors",
+    href: "/doctors",
     icon: <Armchair />,
   },
   {
-    name: "Orders",
-    href: "/orders",
+    name: "Patients",
+    href: "/patients",
     icon: <ShoppingCart />,
+  },
+  {
+    name: "Schedules",
+    href: "/schedules",
+    icon: <MessageSquareMore />,
+  },
+  {
+    name: "Appointments",
+    href: "/appointments",
+    icon: <HandCoins />,
   },
   {
     name: "Messages",
     href: "/messages",
-    icon: <MessageSquareMore />,
-  },
-  {
-    name: "Payment",
-    href: "/payment",
     icon: <HandCoins />,
   },
   {
