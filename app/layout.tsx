@@ -19,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Stylish Furniture",
-  description: "Stylish Furniture Dashboard Administration",
+  title: "Patient Management",
+  description: "Patient Management Dashboard Administration",
 };
 
 export default async function RootLayout({

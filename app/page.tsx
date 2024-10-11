@@ -1,41 +1,44 @@
+import {
+  BriefcaseMedical,
+  ClipboardPlus,
+  CalendarClock,
+  CalendarCheck,
+} from "lucide-react";
 import DashboardCard from "@/components/dashboard/dashboard-card";
-import { Armchair, ShoppingCart, Truck, Loader } from "lucide-react";
-// import { GetTotalProducts } from "@/lib/actions/products";
-// import {
-//   GetPendingOrders,
-//   GetDeliveryOrders,
-//   GetCompletedOrders,
-// } from "@/lib/actions/orders";
-import OrdersTable from "@/components/dashboard/orders-table";
+import { GetTotalAppointment } from "@/lib/actions/appointments";
+import { GetTotalDoctors } from "@/lib/actions/doctors";
+import { GetTotalSchedules } from "@/lib/actions/schedules";
+import { GetTotalPatients } from "@/lib/actions/patients";
+import AppointmentsTable from "@/components/dashboard/appointments-table";
 
 export default async function Dashboard() {
-  // const [products, pending, delivery, completed] = await Promise.all([
-  //   GetTotalProducts(),
-  //   GetPendingOrders(),
-  //   GetDeliveryOrders(),
-  //   GetCompletedOrders(),
-  // ]);
+  const [appointments, doctors, schedules, patients] = await Promise.all([
+    GetTotalAppointment(),
+    GetTotalDoctors(),
+    GetTotalSchedules(),
+    GetTotalPatients(),
+  ]);
 
   const cards = [
     {
-      title: "Total Products",
-      number: 1,
-      icon: <Armchair size={25} className="text-primary" />,
+      title: "Total Patients",
+      number: patients,
+      icon: <ClipboardPlus size={25} className="text-primary" />,
     },
     {
-      title: "Pending Orders",
-      number: 2,
-      icon: <Loader size={25} className="text-primary" />,
+      title: "Total Doctors",
+      number: doctors,
+      icon: <BriefcaseMedical size={25} className="text-primary" />,
     },
     {
-      title: "Out For Delivery Orders",
-      number: 3,
-      icon: <Truck size={25} className="text-primary" />,
+      title: "Total Schedules",
+      number: schedules,
+      icon: <CalendarClock size={25} className="text-primary" />,
     },
     {
-      title: "Total Orders",
-      number: 4,
-      icon: <ShoppingCart size={25} className="text-primary" />,
+      title: "Total Appointments",
+      number: appointments,
+      icon: <CalendarCheck size={25} className="text-primary" />,
     },
   ];
 
@@ -48,9 +51,9 @@ export default async function Dashboard() {
         ))}
       </div>
       <div className="flex flex-1 flex-col lg:flex-row gap-4 mt-4">
-        {/* <div className="w-full">
-          <OrdersTable searchQuery="" page={1} />
-        </div> */}
+        <div className="w-full">
+          <AppointmentsTable searchQuery="" page={1} />
+        </div>
       </div>
     </div>
   );
