@@ -5,11 +5,11 @@ import {
   CalendarCheck,
 } from "lucide-react";
 import DashboardCard from "@/components/dashboard/dashboard-card";
+import AppointmentsTable from "@/components/dashboard/appointments-table";
 import { GetTotalAppointment } from "@/lib/actions/appointments";
 import { GetTotalDoctors } from "@/lib/actions/doctors";
 import { GetTotalSchedules } from "@/lib/actions/schedules";
 import { GetTotalPatients } from "@/lib/actions/patients";
-import AppointmentsTable from "@/components/dashboard/appointments-table";
 
 export default async function Dashboard() {
   const [appointments, doctors, schedules, patients] = await Promise.all([
