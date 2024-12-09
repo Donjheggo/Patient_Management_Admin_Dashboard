@@ -62,6 +62,7 @@ export default async function AppointmentsTable({
               <TableHead className="table-cell">Doctor</TableHead>
               <TableHead className="table-cell">Start time</TableHead>
               <TableHead className="table-cell">End time</TableHead>
+              <TableHead className="table-cell">Remarks</TableHead>
               <TableHead className="table-cell">Status</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -85,7 +86,8 @@ export default async function AppointmentsTable({
 
                 <TableCell>
                   <p className="font-normal">
-                    {new Date(item.schedule_id.start_time).toLocaleTimeString()} -{" "}
+                    {new Date(item.schedule_id.start_time).toLocaleTimeString()}{" "}
+                    -{" "}
                     {new Date(item.schedule_id.start_time).toLocaleDateString()}
                   </p>
                 </TableCell>
@@ -96,7 +98,7 @@ export default async function AppointmentsTable({
                     {new Date(item.schedule_id.end_time).toLocaleDateString()}
                   </p>
                 </TableCell>
-
+                <TableCell>{item.remarks}</TableCell>
                 <TableCell>
                   {item.status === "PENDING" ? (
                     <Badge variant="outline">Pending</Badge>

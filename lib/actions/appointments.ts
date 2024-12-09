@@ -58,6 +58,7 @@ export async function UpdateAppointment(formData: FormData) {
     const { error } = await supabase
       .from("appointments")
       .update({
+        remarks: formData.get("remarks"),
         status: formData.get("status"),
       })
       .eq("id", formData.get("id"))

@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { UpdateAppointment } from "@/lib/actions/appointments";
 import { toast } from "react-toastify";
@@ -17,7 +18,11 @@ import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Tables } from "@/database.types";
 
-export default function UpdateAppointmentForm({ item }: { item: AppointmentT }) {
+export default function UpdateAppointmentForm({
+  item,
+}: {
+  item: AppointmentT;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -46,6 +51,15 @@ export default function UpdateAppointmentForm({ item }: { item: AppointmentT }) 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-4 mt-5 container max-w-screen-sm mx-auto">
+        <div className="grid gap-2">
+          <Label htmlFor="name">Remarks</Label>
+          <Textarea
+            name="remarks"
+            id="remarks"
+            placeholder="Write remarks here"
+            required
+          />
+        </div>
         <div className="grid gap-2">
           <Label htmlFor="name">Status</Label>
           <input
@@ -79,4 +93,4 @@ export default function UpdateAppointmentForm({ item }: { item: AppointmentT }) 
   );
 }
 
-export type AppointmentT = Tables<"appointments">
+export type AppointmentT = Tables<"appointments">;
